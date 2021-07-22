@@ -2,10 +2,16 @@
 <script src='https://d3js.org/d3.v5.min.js'></script>
 <link href="css/styles.css" rel="stylesheet" type="text/css" media="all">
 
-<body onload='init()'>
+<body onload='drawscene(1)'>
 
     <div id="title">Title</div>
-    <div id="navigation">Navigation</div>
+    <div id="navigation">
+        <input type="button" value="<" onclick="bscene()" />
+        <input type="button" value="1" onclick="changescene(1)" />
+        <input type="button" value="2" onclick="changescene(2)" />
+        <input type="button" value="3" onclick="changescene(3)" />
+        <input type="button" value=">" onclick="fscene()" />
+    </div>
     <div id="annotation">Anotation</div>
     <div id="graph">
         <svg width=400 height=400>
@@ -14,7 +20,46 @@
     <div id="instruction">Instructions</div>
 
     <script>
-        async function init() {
+        var pscene = 1
+
+        function bscene() {
+            if (pscene > 1) {
+                pscene--;
+                drawscene()
+            }
+        }
+        function changescene(sceneno) {
+            pscene = sceneno;
+            drawscene();
+        }
+        function fscene() {
+            if (pscene < 3) {
+                pscene++;
+                drawscene()
+            }
+        }
+        function drawscene() {
+            //alert('drawscene:' + pscene);
+            document.getElementById('title').innerHTML = 'Title: Scene ' + pscene;
+
+            switch (pscene) {
+                case 2:
+                    drawgraph1('blue');
+                    break;
+                case 3:
+                    drawgraph1('red');
+                    break;
+                default:
+                    drawgraph1('green');
+            }
+
+        }
+
+    </script>
+    
+    
+    <script>
+        async function drawgraph1(clr) {
             const data = await d3.csv('https://flunky.github.io/cars2017.csv');
             console.log(data)
 
@@ -31,6 +76,7 @@
                 .attr('cx', function (d) { return xs(d.AverageCityMPG); })
                 .attr('cy', function (d) { return ys(d.AverageHighwayMPG); })
                 .attr('r', function (d) { return (2 + parseInt(d.EngineCylinders)); })
+                .style('fill',clr)
 
             d3.select("svg")
                 .append("g").attr("transform", "translate(50,50)")
@@ -41,5 +87,7 @@
                 .call(d3.axisBottom(xs).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s")))
         }
     </script>
+
+    
 </body>
 </html>
