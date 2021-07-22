@@ -1,0 +1,44 @@
+circle {
+    fill: green;
+    stroke: black;
+}
+#title {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1000px;
+    height: 100px;
+    border: groove;
+}
+#navigation {
+    position: absolute;
+    top: 100px;
+    left: 0px;
+    width: 300px;
+    height: 100px;
+    border: groove;
+}
+#annotation {
+    position: absolute;
+    top: 200px;
+    left: 0px;
+    width: 300px;
+    height: 300px;
+    border: groove;
+}
+#graph {
+    position: absolute;
+    top: 100px;
+    left: 300px;
+    width: 400px;
+    height: 400px;
+    border:groove;
+}
+#instruction {
+    position: absolute;
+    top: 100px;
+    left: 700px;
+    border: groove;
+    width: 300px;
+    height: 400px;
+}
