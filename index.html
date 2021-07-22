@@ -20,6 +20,11 @@
         var pscene = 1;
         var data;
         var delephant;
+        var bisect;
+        var focus;
+        var focusText;
+        var xs;
+        var ys;
 
         async function narrativeload() {
             data = await d3.csv('https://flunky.github.io/cars2017.csv');
@@ -71,8 +76,8 @@
 
             d3.select('svg').selectAll('*').remove();
 
-            var xs = d3.scaleLog().domain([10, 150]).range([0, 300])
-            var ys = d3.scaleLog().domain([10, 150]).range([300, 0])
+            xs = d3.scaleLog().domain([10, 150]).range([0, 300])
+            ys = d3.scaleLog().domain([10, 150]).range([300, 0])
 
             d3.select('svg')
                 .append('g').attr("transform", "translate(50,50)")
@@ -92,6 +97,7 @@
             d3.select("svg")
                 .append("g").attr("transform", "translate(50,350)")
                 .call(d3.axisBottom(xs).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s")))
+
         }
     </script>
 
@@ -100,8 +106,8 @@
 
             d3.select('svg').selectAll('*').remove();
 
-            var xs = d3.scaleLinear().domain([0, 19]).range([0, 300])
-            var ys = d3.scaleLinear().domain([-1, 1]).range([300, 0])
+            xs = d3.scaleLinear().domain([0, 19]).range([0, 300])
+            ys = d3.scaleLinear().domain([-1, 1]).range([300, 0])
 
             var line = d3.line()
                 .x(function (d) { return xs(d.quintile); })
@@ -128,7 +134,70 @@
                 .append("g").attr("transform", "translate(50,350)")
                 .call(d3.axisBottom(xs).tickValues([0,4,9,14,19]).tickFormat(d3.format("~s")))
 
+            // This allows to find the closest X index of the mouse:
+            bisect = d3.bisector(function (d) { return d.quintile; }).left;
+
+            // Create the circle that travels along the curve of chart
+            focus = d3.select("svg")
+                .append('g')
+                .append('circle')
+                .style("fill", "none")
+                .attr("stroke", "black")
+                .attr('r', 8.5)
+                .style("opacity", 0)
+
+            // Create the text that travels along the curve of chart
+           focusText = d3.select("svg")
+                .append('g')
+                .append('text')
+                .style("opacity", 0)
+                .attr("text-anchor", "left")
+                .attr("alignment-baseline", "middle")
+
+            // Create a rect on top of the svg area: this rectangle recovers mouse position
+            d3.select("svg")
+                .append('g').attr("transform", "translate(50,50)")
+                .append('rect')
+                .style("fill", "none")
+                .style("pointer-events", "all")
+                .attr('width', 300)
+                .attr('height', 300)
+                .on('mouseover', mouseover)
+                .on('mousemove', mousemove)
+                .on('mouseout', mouseout);
+
+
         }
+
+        // What happens when the mouse move -> show the annotations at the right positions.
+        function mouseover() {
+            focus.style("opacity", 1)
+            focusText.style("opacity", 1)
+        }
+
+        function mousemove() {
+            // recover coordinate we need
+            var x0 = xs.invert(d3.mouse(this)[0]);
+
+            var i = bisect(delephant, x0, 0);
+            selectedData = delephant[i]
+
+            var flipsign = 1;
+            if (i >= 10) { flipsign = -1}
+
+            focus
+                .attr("cx",xs(selectedData.quintile) + 50)
+                .attr("cy",ys(selectedData.RRinc) + 50)
+            focusText
+                .html("Quintile:" + selectedData.quintile + "-RRinc:" + Math.round(selectedData.RRinc*100)/100)
+                .attr("x", xs(selectedData.quintile) + (65*flipsign))
+                .attr("y", ys(selectedData.RRinc) + 50)
+        }
+        function mouseout() {
+            focus.style("opacity", 0)
+            focusText.style("opacity", 0)
+        }
+
     </script>
 
 </body>
