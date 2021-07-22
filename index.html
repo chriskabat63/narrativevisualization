@@ -13,18 +13,17 @@
         <input type="button" value=">" onclick="fscene()" />
     </div>
     <div id="annotation">Anotation</div>
-    <div id="graph">
-        <svg width=400 height=400>
-        </svg>
-    </div>
+    <div id="graph"><svg height="400" width="400"></svg></div>
     <div id="instruction">Instructions</div>
 
     <script>
         var pscene = 1;
+        var data;
+        var delephant;
 
         async function narrativeload() {
-            const data = await d3.csv('https://flunky.github.io/cars2017.csv');
-            const delephant = await d3.csv('https://chriskabat63.github.io/narrativevisulization/data/elephant.csv');
+            data = await d3.csv('https://flunky.github.io/cars2017.csv');
+            delephant = await d3.csv('https://chriskabat63.github.io/narrativevisualization/data/elephant.csv');
 
             pscene = 1;
             drawscene();
@@ -67,7 +66,10 @@
 
 
     <script>
+
         async function drawgraph1(clr) {
+
+            d3.select('svg').selectAll('*').remove();
 
             var xs = d3.scaleLog().domain([10, 150]).range([0, 300])
             var ys = d3.scaleLog().domain([10, 150]).range([300, 0])
@@ -96,29 +98,36 @@
     <script>
         async function drawelephant(clr) {
 
-            var xs = d3.scaleLog().domain([10, 150]).range([0, 300])
-            var ys = d3.scaleLog().domain([10, 150]).range([300, 0])
+            d3.select('svg').selectAll('*').remove();
+
+            var xs = d3.scaleLinear().domain([0, 19]).range([0, 300])
+            var ys = d3.scaleLinear().domain([-1, 1]).range([300, 0])
+
+            var line = d3.line()
+                .x(function (d) { return xs(d.quintile); })
+                .y(function (d) { return xy(d.RRinc); })
+                .curve(d3.curveBasis);
 
             d3.select('svg')
                 .append('g').attr("transform", "translate(50,50)")
-                .append("path")
+                .append('path')
                 .datum(delephant)
                 .attr("fill", "none")
-                .attr("stroke", "steelblue")
-                .attr("stroke-width", 1.5)
+                .attr("stroke", "Red")
+                .attr("stroke-width", 2)
                 .attr("d", d3.line()
-                    .x(function (d) { return x(d.quintile) })
-                    .y(function (d) { return y(d.RRinc) })
+                    .x(function (d) { return xs(parseInt(d.quintile)) })
+                    .y(function (d) { return ys(parseFloat(d.RRinc)) })
                 )
-
 
             d3.select("svg")
                 .append("g").attr("transform", "translate(50,50)")
-                .call(d3.axisLeft(ys).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s")))
+                .call(d3.axisLeft(ys).tickValues([-1,0,1]).tickFormat(d3.format("~s")))
 
             d3.select("svg")
                 .append("g").attr("transform", "translate(50,350)")
-                .call(d3.axisBottom(xs).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s")))
+                .call(d3.axisBottom(xs).tickValues([0,4,9,14,19]).tickFormat(d3.format("~s")))
+
         }
     </script>
 
