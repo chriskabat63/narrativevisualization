@@ -29,6 +29,10 @@
         async function narrativeload() {
             data = await d3.csv('https://flunky.github.io/cars2017.csv');
             delephant = await d3.csv('https://chriskabat63.github.io/narrativevisualization/data/elephant.csv');
+            delephant1993 = await d3.csv('https://chriskabat63.github.io/narrativevisualization/data/elephant19932008.csv');
+            delephant1998 = await d3.csv('https://chriskabat63.github.io/narrativevisualization/data/elephant19982008.csv');
+            delephant2003 = await d3.csv('https://chriskabat63.github.io/narrativevisualization/data/elephant20032008.csv');
+            dincbygroup = await d3.csv('https://chriskabat63.github.io/narrativevisualization/data/incbygroup.csv');
 
             pscene = 1;
             drawscene();
