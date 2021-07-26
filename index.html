@@ -60,10 +60,10 @@
 
             switch (pscene) {
                 case 2:
-                    drawelephant('blue');
+                    drawelephant();
                     break;
                 case 3:
-                    drawgraph1('red');
+                    drawallelephant();
                     break;
                 default:
                     drawgraph1('green');
@@ -106,7 +106,7 @@
     </script>
 
     <script>
-        async function drawelephant(clr) {
+        async function drawelephant() {
 
             document.getElementById('instruction').innerHTML = "<Strong>RRinc</Strong> is a measure of the average annual income of an individual in this country in this income decile group. The units are 2005 PPP which corresponds approximately to US dollars in the year 2005.";
             document.getElementById('annotation').innerHTML = "This report shows the quantile change in RRinc in 2008 relative to RRinc in 1988 across the globe.  The highlighted area shows the quantiles that show the least gain";
@@ -133,6 +133,143 @@
                     .y(function (d) { return ys(parseFloat(d.RRinc)) })
                 )
 
+            d3.select("svg")
+                .append("g").attr("transform", "translate(50,50)")
+                .call(d3.axisLeft(ys).tickValues([0,1]).tickFormat(d3.format("~s")))
+
+            d3.select("svg")
+                .append("g").attr("transform", "translate(50,350)")
+                .call(d3.axisBottom(xs).tickFormat(d3.format("~s")))
+
+            //Show Title
+            d3.select("svg").append("text")
+                .attr("x", 400 / 2)
+                .attr("y", 50)
+                .attr("text-anchor", "middle")
+                .style("font-size", "16px")
+                .text("Elephant Chart");
+
+            //X Axis
+            d3.select("svg").append("text")
+                .attr("transform", "translate(" + (400 / 2) + " ," + (400 - 10) + ")")
+                .style("text-anchor", "middle")
+                .text("Global Income Distribution");
+
+            //Y Axis
+            d3.select("svg").append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("x", -(400 / 2))
+                .attr("y", 15)
+                .style("text-anchor", "middle")
+                .text("Income Growth %");
+
+            // This allows to find the closest X index of the mouse:
+            bisect = d3.bisector(function (d) { return d.quintile; }).left;
+
+            // show the area of less income growth
+            focus = d3.select("svg")
+                .append('g')
+                .append('rect')
+                .style("fill", "solid")
+                .attr("stroke", "yellow")
+                .attr('x', xs(14)+50)
+                .attr('y', ys(.28)+75)
+                .attr('width', 75)
+                .attr('height', 75)
+                .style("opacity", .2)
+
+            // Create the circle that travels along the curve of chart
+            focus = d3.select("svg")
+                .append('g')
+                .append('circle')
+                .style("fill", "none")
+                .attr("stroke", "black")
+                .attr('r', 8.5)
+                .style("opacity", 0)
+
+            // Create the text that travels along the curve of chart
+           focusText = d3.select("svg")
+                .append('g')
+                .append('text')
+                .style("opacity", 0)
+                .attr("text-anchor", "left")
+                .attr("alignment-baseline", "middle")
+
+            // Create a rect on top of the svg area: this rectangle recovers mouse position
+            d3.select("svg")
+                .append('g').attr("transform", "translate(50,50)")
+                .append('rect')
+                .style("fill", "none")
+                .style("pointer-events", "all")
+                .attr('width', 300)
+                .attr('height', 300)
+                .on('mouseover', mouseover)
+                .on('mousemove', mousemove)
+                .on('mouseout', mouseout);
+
+
+        }
+
+        async function drawallelephant() {
+
+            document.getElementById('instruction').innerHTML = "<Strong>RRinc</Strong> is a measure of the average annual income of an individual in this country in this income decile group. The units are 2005 PPP which corresponds approximately to US dollars in the year 2005.";
+            document.getElementById('annotation').innerHTML = "This report shows the quantile change in RRinc in 2008 relative to RRinc in 1988 across the globe.  The highlighted area shows the quantiles that show the least gain";
+
+            d3.select('svg').selectAll('*').remove();
+
+            xs = d3.scaleLinear().domain([0, 19]).range([0, 300])
+            ys = d3.scaleLinear().domain([0, 1]).range([300, 0])
+
+            var line = d3.line()
+                .x(function (d) { return xs(d.quintile); })
+                .y(function (d) { return xy(d.RRinc); })
+                .curve(d3.curveBasis);
+
+            d3.select('svg')
+                .append('g').attr("transform", "translate(50,50)")
+                .append('path')
+                .datum(delephant)
+                .attr("fill", "none")
+                .attr("stroke", "Grey")
+                .attr("stroke-width", 2)
+                .attr("d", d3.line()
+                    .x(function (d) { return xs(parseInt(d.quintile)) })
+                    .y(function (d) { return ys(parseFloat(d.RRinc)) })
+                )
+
+            d3.select('svg')
+                .append('g').attr("transform", "translate(50,50)")
+                .append('path')
+                .datum(delephant1993)
+                .attr("fill", "none")
+                .attr("stroke", "Red")
+                .attr("stroke-width", 2)
+                .attr("d", d3.line()
+                    .x(function (d) { return xs(parseInt(d.quintile)) })
+                    .y(function (d) { return ys(parseFloat(d.RRinc)) })
+            )
+            d3.select('svg')
+                .append('g').attr("transform", "translate(50,50)")
+                .append('path')
+                .datum(delephant1998)
+                .attr("fill", "none")
+                .attr("stroke", "Black")
+                .attr("stroke-width", 2)
+                .attr("d", d3.line()
+                    .x(function (d) { return xs(parseInt(d.quintile)) })
+                    .y(function (d) { return ys(parseFloat(d.RRinc)) })
+            )
+            d3.select('svg')
+                .append('g').attr("transform", "translate(50,50)")
+                .append('path')
+                .datum(delephant2003)
+                .attr("fill", "none")
+                .attr("stroke", "Yellow")
+                .attr("stroke-width", 2)
+                .attr("d", d3.line()
+                    .x(function (d) { return xs(parseInt(d.quintile)) })
+                    .y(function (d) { return ys(parseFloat(d.RRinc)) })
+                )
             d3.select("svg")
                 .append("g").attr("transform", "translate(50,50)")
                 .call(d3.axisLeft(ys).tickValues([0,1]).tickFormat(d3.format("~s")))
