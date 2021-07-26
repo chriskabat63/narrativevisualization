@@ -27,7 +27,6 @@
         var ys;
 
         async function narrativeload() {
-            data = await d3.csv('https://flunky.github.io/cars2017.csv');
             delephant = await d3.csv('https://chriskabat63.github.io/narrativevisualization/data/elephant.csv');
             delephant1993 = await d3.csv('https://chriskabat63.github.io/narrativevisualization/data/elephant19932008.csv');
             delephant1998 = await d3.csv('https://chriskabat63.github.io/narrativevisualization/data/elephant19982008.csv');
@@ -66,7 +65,7 @@
                     drawallelephant();
                     break;
                 default:
-                    drawgraph1('green');
+                    drawincomebygroup();
             }
 
         }
@@ -76,31 +75,70 @@
 
     <script>
 
-        async function drawgraph1(clr) {
+        async function drawincomebygroup() {
 
             d3.select('svg').selectAll('*').remove();
 
-            xs = d3.scaleLog().domain([10, 150]).range([0, 300])
-            ys = d3.scaleLog().domain([10, 150]).range([300, 0])
+            // group the data
+            var incomegroups = d3.nest()
+                .key(function (d) { return d.group; })
+                .entries(dincbygroup);
+
+            xs = d3.scaleLinear().domain([1988, 2008]).range([0, 300])
+            ys = d3.scaleLinear().domain([0,15000]).range([300, 0])
+
+            // color palette
+            var colors = incomegroups.map(function (d) { return d.key; }) // list of group names
+            var colormap = d3.scaleOrdinal()
+                .domain(colors)
+                .range(d3.schemeCategory10)
 
             d3.select('svg')
                 .append('g').attr("transform", "translate(50,50)")
-                .selectAll('circle')
-                .data(data)
+                .selectAll('.line')
+                .data(incomegroups)
                 .enter()
-                .append('circle')
-                .attr('cx', function (d) { return xs(d.AverageCityMPG); })
-                .attr('cy', function (d) { return ys(d.AverageHighwayMPG); })
-                .attr('r', function (d) { return (2 + parseInt(d.EngineCylinders)); })
-                .style('fill', clr)
+                .append('path')
+                .attr("fill", "none")
+                .attr("stroke-width", 2)
+                .attr("stroke", function (d) { return colormap(d.key) })
+                .attr("d", function (d) {
+                    return d3.line()
+                        .x(function (d) { return xs(parseInt(d.bin_year)); })
+                        .y(function (d) { return ys(parseFloat(d.RRinc)); })
+                        (d.values)
+                })
+
 
             d3.select("svg")
                 .append("g").attr("transform", "translate(50,50)")
-                .call(d3.axisLeft(ys).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s")))
+                .call(d3.axisLeft(ys).tickFormat(d3.format("~s")))
 
             d3.select("svg")
                 .append("g").attr("transform", "translate(50,350)")
-                .call(d3.axisBottom(xs).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s")))
+                .call(d3.axisBottom(xs).tickValues([1993,1998,2003,2008]).tickFormat(d3.format("~s")))
+
+            //Show Title
+            d3.select("svg").append("text")
+                .attr("x", 400 / 2)
+                .attr("y", 50)
+                .attr("text-anchor", "middle")
+                .style("font-size", "16px")
+                .text("Income by Year and Decile Group");
+
+            //X Axis
+            d3.select("svg").append("text")
+                .attr("transform", "translate(" + (400 / 2) + " ," + (400 - 10) + ")")
+                .style("text-anchor", "middle")
+                .text("Year");
+
+            //Y Axis
+            d3.select("svg").append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("x", -(400 / 2))
+                .attr("y", 15)
+                .style("text-anchor", "middle")
+                .text("Income");
 
         }
     </script>
