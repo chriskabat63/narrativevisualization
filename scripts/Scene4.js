@@ -5,9 +5,9 @@ function populateScene4Text() {
      In this analysis, you can see that checking additional periods within the dataset
      does not show much of an improvement for those in the 80-85% distribution range.
      <br><br>
-     It is obvious that the growth % would be reduced for shorter time periods, but the
-     elephant pattern is consistent across each of the time periods.
-    `;
+     By looking at individual lines, the growth has changed a bit, but the elephant pattern
+     still remains in tact.
+     `;
 
     document.getElementById('bottominstructions').innerHTML = `
      The <span style="background-color:grey;color:white;">grey</span> box was added to highlight the lowest amount of income growth.
