@@ -1,4 +1,5 @@
-function populateScene3Text(){
+function populateScene4Text() {
+
     document.getElementById('maintitle').innerHTML = "Tracking the Elephant";
     document.getElementById('subtitle').innerHTML = `
     Branko Milanovic and Christoph Lakner did a study in which they collected real incomes
@@ -6,21 +7,20 @@ function populateScene3Text(){
     approximately to US dollars in the year 2005.
     `;
 
-    document.getElementById('mainanalysis').innerHTML = "The Elephant Chart";
+    document.getElementById('mainanalysis').innerHTML = "The Elephant Chart Over Time";
     document.getElementById('subanalysis').innerHTML = `
-     The famous "Elephant Chart" shows a little different picture.  This chart shows income
-     gains across the global distribution of income. <br><br>
-     There were very strong gains in the global midpoint as well as in the very high
-     income quintiles.<br><br>
-     We've annotated the area of lowest income growth in grey.<br><br>
-     This analysis shows 1988-2003, but has it gotten better over time?
+     In this analysis, you can see that checking additional periods within the dataset
+     does not show much of an improvement for those in the 80-85% distribution range.
+     <br><br>
     `;
 
     document.getElementById('bottominstructions').innerHTML = `
      The <span style="background-color:grey;color:white;">grey</span> box was added to highlight the lowest amount of income growth.
      <br><br>
      You can also hover over the line to get some details.
+     <br><br>
+     Clicking the circles in the legend will also toggle the lines to allow you to choose which
+     periods to compare.
     `;
 
 }
-

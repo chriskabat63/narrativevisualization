@@ -4,6 +4,7 @@
     <script src='scripts/Scene1.js'></script>
     <script src='scripts/Scene2.js'></script>
     <script src='scripts/Scene3.js'></script>
+    <script src='scripts/Scene4.js'></script>
     <link href="css/styles.css" rel="stylesheet" type="text/css" media="all">
 </head>
 
@@ -24,6 +25,7 @@
         <input type="button" class="button" value="1" onclick="changescene(1)" />
         <input type="button" class="button" value="2" onclick="changescene(2)" />
         <input type="button" class="button" value="3" onclick="changescene(3)" />
+        <input type="button" class="button" value="4" onclick="changescene(4)" />
         <input type="button" class="button" value=">" onclick="fscene()" />
         <p>Use these navigation buttons to move between scenes and explore the analysis.</p>
     </div>
@@ -71,6 +73,7 @@
         var c1993on = true;
         var c1998on = true;
         var c2003on = true;
+        var annotationon = false;
 
         // color palette
         var elephantcolormap = d3.scaleOrdinal()
@@ -99,7 +102,7 @@
             drawscene();
         }
         function fscene() {
-            if (pscene < 3) {
+            if (pscene < 4) {
                 pscene++;
                 drawscene()
             }
@@ -108,14 +111,22 @@
 
             switch (pscene) {
                 case 2:
+                    annotationon = false;
                     populateScene2Text();
                     drawelephant();
                     break;
                 case 3:
+                    annotationon = true;
                     populateScene3Text();
+                    drawelephant();
+                    break;
+                case 4:
+                    annotationon = true;
+                    populateScene4Text();
                     drawallelephant();
                     break;
                 default:
+                    annotationon = false;
                     populateScene1Text();
                     drawincomebygroup();
             }
@@ -275,18 +286,40 @@
             // This allows to find the closest X index of the mouse:
             bisect = d3.bisector(function (d) { return parseFloat((d.quintile * 5) + 2.5); }).left;
 
-            // show the area of less income growth
-            focus = d3.select("svg")
-                .append('g')
-                .append('rect')
-                .style("fill", "solid")
-                .attr("stroke", "yellow")
-                .attr('x', xs((14*5)) + 50)
-                .attr('y', ys(28) + 75)
-                .attr('width', 75)
-                .attr('height', 75)
-                .style("opacity", .2)
+            if (annotationon) {
+                // show the area of less income growth
+                focus = d3.select("svg")
+                    .append('g')
+                    .append('rect')
+                    .style("fill", "solid")
+                    .attr("stroke", "yellow")
+                    .attr('x', xs((14 * 5)) + 50)
+                    .attr('y', ys(28) + 75)
+                    .attr('width', 75)
+                    .attr('height', 75)
+                    .style("opacity", .2)
 
+                d3.select("svg")
+                    .append("g").attr("transform", "translate(50,50)")
+                    .append("text")
+                    .attr("x", xs(80))
+                    .attr("y", ys(70))
+                    .text("Area of ")
+                    .append("tspan")
+                    .attr("x", xs(75))
+                    .attr("y", ys(70) + 15)
+                    .text("lowest growth");
+
+                d3.select("svg")
+                    .append("g").attr("transform", "translate(50,50)")
+                    .append('line')
+                    .style("stroke", "grey")
+                    .style("stroke-width", 2)
+                    .attr("x1", xs(90))
+                    .attr("y1", ys(65))
+                    .attr("x2", xs(85))
+                    .attr("y2", ys(20));
+            }   
             // Create the circle that travels along the curve of chart
             focus = d3.select("svg")
                 .append('g')
@@ -416,7 +449,7 @@
                 .attr("y", 50)
                 .attr("text-anchor", "middle")
                 .style("font-size", "16px")
-                .text("Elephant Chart (Multiple Years)");
+                .text("Elephant Chart (Multiple Time Periods)");
 
             //X Axis
             d3.select("svg").append("text")
@@ -435,17 +468,40 @@
             // This allows to find the closest X index of the mouse:
             bisect = d3.bisector(function (d) { return d.quintile*5; }).left;
 
-            // show the area of less income growth
+            // show the area of less income growth and text
             focus = d3.select("svg")
                 .append('g')
                 .append('rect')
                 .style("fill", "solid")
                 .attr("stroke", "yellow")
-                .attr('x', xs(14*5) + 50)
+                .attr('x', xs(14 * 5) + 50)
                 .attr('y', ys(28) + 75)
                 .attr('width', 75)
                 .attr('height', 75)
-                .style("opacity", .2)
+                .style("opacity", .2);
+
+            d3.select("svg")
+                .append("g").attr("transform", "translate(50,50)")
+                .append("text")
+                .attr("x", xs(80))
+                .attr("y", ys(70))
+                .text("Area of ")
+                .append("tspan")
+                .attr("x", xs(75))
+                .attr("y", ys(70) + 15)
+                .text("lowest growth");
+
+            d3.select("svg")
+                .append("g").attr("transform", "translate(50,50)")
+                .append('line')
+                .style("stroke", "grey")
+                .style("stroke-width", 2)
+                .attr("x1", xs(90))
+                .attr("y1", ys(65))
+                .attr("x2", xs(85))
+                .attr("y2", ys(20));
+
+  
 
             // Create the circle that travels along the curve of chart (1988)
             focus = d3.select("svg")

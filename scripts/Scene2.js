@@ -12,13 +12,10 @@ function populateScene2Text(){
      gains across the global distribution of income. <br><br>
      There were very strong gains in the global midpoint as well as in the very high
      income quintiles.<br><br>
-     This analysis shows 1988-2003, but has it gotten better over time?
     `;
 
     document.getElementById('bottominstructions').innerHTML = `
-     The <span style="background-color:grey;color:white;">grey</span> box was added to highlight the lowest amount of income growth.
-     <br><br>
-     You can also hover over the line to get some details.
+     You can hover over the line to get some details.
     `;
 
 }

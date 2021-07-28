@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\css",
-    "\\data"
+    "\\data",
+    "\\scripts"
   ],
-  "SelectedNode": "\\index.html",
+  "SelectedNode": "\\scripts\\Scene3.js",
   "PreviewInSolutionExplorer": false
 }
