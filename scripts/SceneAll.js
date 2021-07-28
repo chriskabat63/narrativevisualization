@@ -1,6 +1,6 @@
 function populateSceneAllText(){
     document.getElementById('maintitle').innerHTML = "Tracking the Elephant";
-    document.getElementById('subtitle').innerHTML = `
+    document.getElementById('subtitle').innerHTML = ` 
     Branko Milanovic and Christopher Lakner did a study in which they collected real incomes
     across the globe from approximately 120 countries.  The units are 2005 PPP which corresponds
     approximately to US dollars in the year 2005. Their study showed there has been an absence
