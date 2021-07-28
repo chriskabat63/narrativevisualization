@@ -5,6 +5,7 @@
     <script src='scripts/Scene2.js'></script>
     <script src='scripts/Scene3.js'></script>
     <script src='scripts/Scene4.js'></script>
+    <script src='scripts/SceneAll.js'></script>
     <link href="css/styles.css" rel="stylesheet" type="text/css" media="all">
 </head>
 
@@ -109,6 +110,7 @@
         }
         function drawscene() {
 
+            populateSceneAllText();
             switch (pscene) {
                 case 2:
                     annotationon = false;
@@ -224,7 +226,7 @@
                 .append('text')
                 .attr("x", 40)
                 .attr("y", function (d) { return parseInt(d.key * 20)+5; })
-                .text(function (d) { return "Decile Group " + d.key; });
+                .text(function (d) { return "Decile " + d.key; });
         }
     </script>
 

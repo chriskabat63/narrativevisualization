@@ -1,17 +1,12 @@
 function populateScene4Text() {
 
-    document.getElementById('maintitle').innerHTML = "Tracking the Elephant";
-    document.getElementById('subtitle').innerHTML = `
-    Branko Milanovic and Christoph Lakner did a study in which they collected real incomes
-    across the globe from approximately 120 countries.  The units are 2005 PPP which corresponds
-    approximately to US dollars in the year 2005.
-    `;
-
     document.getElementById('mainanalysis').innerHTML = "The Elephant Chart Over Time";
     document.getElementById('subanalysis').innerHTML = `
      In this analysis, you can see that checking additional periods within the dataset
      does not show much of an improvement for those in the 80-85% distribution range.
      <br><br>
+     It is obvious that the growth % would be reduced for shorter time periods, but the
+     elephant pattern is consistent across each of the time periods.
     `;
 
     document.getElementById('bottominstructions').innerHTML = `
