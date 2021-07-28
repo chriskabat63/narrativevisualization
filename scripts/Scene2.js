@@ -6,13 +6,19 @@ function populateScene2Text(){
     approximately to US dollars in the year 2005.
     `;
 
-    document.getElementById('mainanalysis').innerHTML = "Income by Decile Group";
+    document.getElementById('mainanalysis').innerHTML = "The Elephant Chart";
     document.getElementById('subanalysis').innerHTML = `
-    The first step is to look at the mean of income by decile group.  This has been plotted
-    by the years in the study of 1988, 1993, 1998, 2003, and 2008.<br><br>
-    At first glance, you can see that income growth (or loss) across decile groups
-    seems pretty consistent.<br><br>
-    However further analysis showed that things may not be as consistent as they seem.<br>
+     The famous "Elephant Chart" shows a little different picture.  This chart shows income
+     gains across the global distribution of income. <br><br>
+     There were very strong gains in the global midpoint as well as in the very high
+     income quintiles.<br><br>
+     This analysis shows 1988-2003, but has it gotten better over time?
+    `;
+
+    document.getElementById('bottominstructions').innerHTML = `
+     The <span style="background-color:grey;color:white;">grey</span> box was added to highlight the lowest amount of income growth.
+     <br><br>
+     You can also hover over the line to get some details.
     `;
 
 }

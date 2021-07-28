@@ -20,11 +20,11 @@
         </table>
     </div>
     <div id="navigation">
-        <input type="button" value="<" onclick="bscene()" />
-        <input type="button" value="1" onclick="changescene(1)" />
-        <input type="button" value="2" onclick="changescene(2)" />
-        <input type="button" value="3" onclick="changescene(3)" />
-        <input type="button" value=">" onclick="fscene()" />
+        <input type="button" class="button" value="<" onclick="bscene()" />
+        <input type="button" class="button" value="1" onclick="changescene(1)" />
+        <input type="button" class="button" value="2" onclick="changescene(2)" />
+        <input type="button" class="button" value="3" onclick="changescene(3)" />
+        <input type="button" class="button" value=">" onclick="fscene()" />
         <p>Use these navigation buttons to move between scenes and explore the analysis.</p>
     </div>
     <div id="analysis">
@@ -45,6 +45,9 @@
             </tr>
             <tr>
                 <td id="subinstructions">Subtitle</td>
+            </tr>
+            <tr>
+                <td id="bottominstructions"></td>
             </tr>
         </table>
     </div>
@@ -191,7 +194,7 @@
 
             //legend
             document.getElementById('subinstructions').innerHTML = "";
-            var legend = d3.select('#subinstructions').append("svg").attr("width", 400).attr("height", 300);
+            var legend = d3.select('#subinstructions').append("svg").attr("width", 300).attr("height", 300);
 
             legend.selectAll('circle')
                 .data(incomegroups)
@@ -219,11 +222,11 @@
 
             d3.select('svg').selectAll('*').remove();
 
-            xs = d3.scaleLinear().domain([0, 19]).range([0, 300])
+            xs = d3.scaleLinear().domain([0, 100]).range([0, 300])
             ys = d3.scaleLinear().domain([0, 100]).range([300, 0])
 
             var line = d3.line()
-                .x(function (d) { return xs(d.quintile); })
+                .x(function (d) { return xs((d.quintile*5)+2.5); })
                 .y(function (d) { return xy(d.RRinc * 100); })
                 .curve(d3.curveBasis);
 
@@ -235,13 +238,13 @@
                 .attr("stroke", elephantcolormap(1988))
                 .attr("stroke-width", 4)
                 .attr("d", d3.line()
-                    .x(function (d) { return xs(parseInt(d.quintile)) })
+                    .x(function (d) { return xs(parseFloat((d.quintile * 5) + 2.5)) })
                     .y(function (d) { return ys(parseFloat(d.RRinc * 100)) })
                 )
 
             d3.select("svg")
                 .append("g").attr("transform", "translate(50,50)")
-                .call(d3.axisLeft(ys).tickValues([0, 1]).tickFormat(d3.format("~s")))
+                .call(d3.axisLeft(ys).tickFormat(d3.format("~s")))
 
             d3.select("svg")
                 .append("g").attr("transform", "translate(50,350)")
@@ -270,7 +273,7 @@
                 .text("Cumulative Growth Rate (%)");
 
             // This allows to find the closest X index of the mouse:
-            bisect = d3.bisector(function (d) { return d.quintile; }).left;
+            bisect = d3.bisector(function (d) { return parseFloat((d.quintile * 5) + 2.5); }).left;
 
             // show the area of less income growth
             focus = d3.select("svg")
@@ -278,7 +281,7 @@
                 .append('rect')
                 .style("fill", "solid")
                 .attr("stroke", "yellow")
-                .attr('x', xs(14) + 50)
+                .attr('x', xs((14*5)) + 50)
                 .attr('y', ys(28) + 75)
                 .attr('width', 75)
                 .attr('height', 75)
@@ -315,7 +318,7 @@
 
             //legend
             document.getElementById('subinstructions').innerHTML = "";
-            var legend = d3.select('#subinstructions').append("svg").attr("width", 400).attr("height", 200);
+            var legend = d3.select('#subinstructions').append("svg").attr("width", 300).attr("height", 200);
 
             legend.append('circle')
                 .style("fill", elephantcolormap(1988))
@@ -337,11 +340,11 @@
 
             d3.select('svg').selectAll('*').remove();
 
-            xs = d3.scaleLinear().domain([0, 19]).range([0, 300])
+            xs = d3.scaleLinear().domain([0, 100]).range([0, 300])
             ys = d3.scaleLinear().domain([0, 100]).range([300, 0])
 
             var line = d3.line()
-                .x(function (d) { return xs(d.quintile); })
+                .x(function (d) { return xs((d.quintile*5)+2.5); })
                 .y(function (d) { return xy(d.RRinc * 100); })
                 .curve(d3.curveBasis);
 
@@ -354,7 +357,7 @@
                     .attr("stroke", elephantcolormap(1988))
                     .attr("stroke-width", 4)
                     .attr("d", d3.line()
-                        .x(function (d) { return xs(parseInt(d.quintile)) })
+                        .x(function (d) { return xs(parseInt((d.quintile*5)+2.5)) })
                         .y(function (d) { return ys(parseFloat(d.RRinc * 100)) })
                     )
             }
@@ -368,7 +371,7 @@
                     .attr("stroke", elephantcolormap(1993))
                     .attr("stroke-width", 4)
                     .attr("d", d3.line()
-                        .x(function (d) { return xs(parseInt(d.quintile)) })
+                        .x(function (d) { return xs(parseInt((d.quintile * 5) + 2.5)) })
                         .y(function (d) { return ys(parseFloat(d.RRinc * 100)) })
                     )
             }
@@ -381,7 +384,7 @@
                     .attr("stroke", elephantcolormap(1998))
                     .attr("stroke-width", 4)
                     .attr("d", d3.line()
-                        .x(function (d) { return xs(parseInt(d.quintile)) })
+                        .x(function (d) { return xs(parseInt((d.quintile * 5) + 2.5)) })
                         .y(function (d) { return ys(parseFloat(d.RRinc * 100)) })
                     )
             }
@@ -394,14 +397,14 @@
                     .attr("stroke", elephantcolormap(2003))
                     .attr("stroke-width", 4)
                     .attr("d", d3.line()
-                        .x(function (d) { return xs(parseInt(d.quintile)) })
+                        .x(function (d) { return xs(parseInt((d.quintile * 5) + 2.5)) })
                         .y(function (d) { return ys(parseFloat(d.RRinc * 100)) })
                     )
             }
 
             d3.select("svg")
                 .append("g").attr("transform", "translate(50,50)")
-                .call(d3.axisLeft(ys).tickValues([0, 1]).tickFormat(d3.format("~s")))
+                .call(d3.axisLeft(ys).tickFormat(d3.format("~s")))
 
             d3.select("svg")
                 .append("g").attr("transform", "translate(50,350)")
@@ -430,7 +433,7 @@
                 .text("Cumulative Growth Rate (%)");
 
             // This allows to find the closest X index of the mouse:
-            bisect = d3.bisector(function (d) { return d.quintile; }).left;
+            bisect = d3.bisector(function (d) { return d.quintile*5; }).left;
 
             // show the area of less income growth
             focus = d3.select("svg")
@@ -438,7 +441,7 @@
                 .append('rect')
                 .style("fill", "solid")
                 .attr("stroke", "yellow")
-                .attr('x', xs(14) + 50)
+                .attr('x', xs(14*5) + 50)
                 .attr('y', ys(28) + 75)
                 .attr('width', 75)
                 .attr('height', 75)
@@ -526,7 +529,7 @@
 
             //legend
             document.getElementById('subinstructions').innerHTML = "";
-            var legend = d3.select('#subinstructions').append("svg").attr("width", 400).attr("height", 200);
+            var legend = d3.select('#subinstructions').append("svg").attr("width", 300).attr("height", 200);
 
             var ccolor = c1988on ? elephantcolormap(1988) : "grey";
             legend.append('circle')
@@ -610,11 +613,11 @@
             if (i >= 10) { flipsign = -1 }
 
             focus
-                .attr("cx", xs(selectedData.quintile) + 50)
+                .attr("cx", xs(selectedData.quintile*5) + 50)
                 .attr("cy", ys(selectedData.RRinc * 100) + 50)
             focusText
-                .html("Quintile:" + selectedData.quintile + "-Growth:" + Math.round(selectedData.RRinc * 100) + '%')
-                .attr("x", xs(selectedData.quintile) + (65 * flipsign))
+                .html("Percentile:" + ((selectedData.quintile*5)+2.5) + "-Growth:" + Math.round(selectedData.RRinc * 100) + '%')
+                .attr("x", xs(((selectedData.quintile * 5) + 2.5)) + (65 * flipsign))
                 .attr("y", ys(selectedData.RRinc * 100) + 50)
         }
         function mouseout() {
@@ -651,38 +654,38 @@
 
             if (c1988on) {
                 focus
-                    .attr("cx", xs(selectedData.quintile) + 50)
+                    .attr("cx", xs(((selectedData.quintile * 5) + 2.5)) + 50)
                     .attr("cy", ys(selectedData.RRinc * 100) + 50)
                 focusText
-                    .html("Quintile:" + selectedData.quintile + "-Growth:" + Math.round(selectedData.RRinc * 100) + '%')
-                    .attr("x", xs(selectedData.quintile) + (65 * flipsign))
+                    .html("Percentile:" + ((selectedData.quintile * 5) + 2.5) + "-Growth:" + Math.round(selectedData.RRinc * 100) + '%')
+                    .attr("x", xs(((selectedData.quintile * 5) + 2.5)) + (65 * flipsign))
                     .attr("y", ys(selectedData.RRinc * 100) + 50)
             }
             if (c1993on) {
                 focus1993
-                    .attr("cx", xs(selectedData1993.quintile) + 50)
+                    .attr("cx", xs(((selectedData.quintile * 5) + 2.5)) + 50)
                     .attr("cy", ys(selectedData1993.RRinc * 100) + 50)
                 focusText1993
-                    .html("Quintile:" + selectedData1993.quintile + "-Growth:" + Math.round(selectedData1993.RRinc * 100) + '%')
-                    .attr("x", xs(selectedData1993.quintile) + (65 * flipsign))
+                    .html("Percentile:" + ((selectedData.quintile * 5) + 2.5) + "-Growth:" + Math.round(selectedData1993.RRinc * 100) + '%')
+                    .attr("x", xs(selectedData1993.quintile*5) + (65 * flipsign))
                     .attr("y", ys(selectedData1993.RRinc * 100) + 50)
             }
             if (c1998on) {
                 focus1998
-                    .attr("cx", xs(selectedData1998.quintile) + 50)
+                    .attr("cx", xs(((selectedData.quintile * 5) + 2.5)) + 50)
                     .attr("cy", ys(selectedData1998.RRinc * 100) + 50)
                 focusText1998
-                    .html("Quintile:" + selectedData1998.quintile + "-Growth:" + Math.round(selectedData1998.RRinc * 100) + '%')
-                    .attr("x", xs(selectedData1998.quintile) + (65 * flipsign))
+                    .html("Percentile:" + ((selectedData.quintile * 5) + 2.5) + "-Growth:" + Math.round(selectedData1998.RRinc * 100) + '%')
+                    .attr("x", xs(((selectedData.quintile * 5) + 2.5)) + (65 * flipsign))
                     .attr("y", ys(selectedData1998.RRinc * 100) + 50)
             }
             if (c2003on) {
                 focus2003
-                    .attr("cx", xs(selectedData2003.quintile) + 50)
+                    .attr("cx", xs(((selectedData.quintile * 5) + 2.5)) + 50)
                     .attr("cy", ys(selectedData2003.RRinc * 100) + 50)
                 focusText2003
-                    .html("Quintile:" + selectedData2003.quintile + "-Growth:" + Math.round(selectedData2003.RRinc * 100) + '%')
-                    .attr("x", xs(selectedData2003.quintile) + (65 * flipsign))
+                    .html("Percentile:" + ((selectedData.quintile * 5) + 2.5) + "-Growth:" + Math.round(selectedData2003.RRinc * 100) + '%')
+                    .attr("x", xs(((selectedData.quintile * 5) + 2.5)) + (65 * flipsign))
                     .attr("y", ys(selectedData2003.RRinc * 100) + 50)
             }
         }

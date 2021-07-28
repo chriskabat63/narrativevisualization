@@ -15,4 +15,6 @@ function populateScene1Text(){
     However further analysis showed that things may not be as consistent as they seem.<br>
     `;
 
+    document.getElementById('bottominstructions').innerHTML ="";
+
 }

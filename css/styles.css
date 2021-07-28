@@ -6,6 +6,15 @@ body{
     font: 14px arial, verdana;
     padding: 4px;
 }
+.button {
+    background-color: rgb(31, 119, 180);
+    border: 4px;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 22px;
+}
 #title {
     position: absolute;
     top: 0px;
@@ -15,9 +24,11 @@ body{
     border: groove;
     padding: 4px;
 }
-#maintitle{
+#maintitle {
     font-weight: bolder;
     font-size: x-large;
+    color: white;
+    background-color: rgb(31, 119, 180); 
 }
 #mainanalysis {
     font-weight: bold;
